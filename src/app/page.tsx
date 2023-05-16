@@ -4,27 +4,30 @@ import React, { useState } from 'react';
 
 export default function Home() {
   const [userInput, setUserInput] = useState("A description of a graph");
-  const [userId, setUserId] = useState('')
-  const [devId, setDevId] = useState('testing')
+  const [userId, setUserId] = useState('Your user_Id')
+  const [devId, setDevId] = useState('Your dev_Id')
   const [API_KEY, setAPI_KEY] = useState("Your API_KEY")
   const [url, setUrl] = useState("")
-    const handleChangeUserInput = (event) => {
+
+  const BASE_URL = "http://localhost:8080"
+
+  const handleChangeUserInput = (event) => {
       setUserInput(event.target.value);
     };
-    const hanleChangeUserId = (event) =>{
-      setUserId(event.target.value);
-    }
-    const handleChangeAPI_KEY = (event) =>{
-      setAPI_KEY(event.target.value);
-    }
-    const handleChangeDevId = (event) =>{
-      setDevId(event.target.value);
-    }
+  const hanleChangeUserId = (event) =>{
+    setUserId(event.target.value);
+  }
+  const handleChangeAPI_KEY = (event) =>{
+    setAPI_KEY(event.target.value);
+  }
+  const handleChangeDevId = (event) =>{
+    setDevId(event.target.value);
+  }
   const options = {
     method: 'GET',
     headers: {
-      "dev-id": "testing",
-      "x-api-key": "VjUc0jvOJO6JwQuGT8vfW6QMcQasAp9za2MFgSq5",
+      "dev-id": `${devId}`,
+      "x-api-key": `${API_KEY}`,
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       "Accept-Language": "en-us,en;q=0.5",
       "Accept-Encoding": "gzip,deflate",
@@ -32,8 +35,7 @@ export default function Home() {
     }
   };
   const makeARequest = (event) =>{
-    fetch(`http://127.0.0.1:8080/graphs/render_gpt?user_input=${userInput}&return_url=true&user_id=${userId}`, options)
-    // fetch(`http://127.0.0.1:8080/graphs/test_render_gpt?user_input=${userInput}&return_url=true`, options)
+    fetch(`${BASE_URL}/graphs/render_gpt?user_input=${userInput}&return_url=true&user_id=${userId}`, options)
       .then(response => response.json())
       .then(response => {
         if(response["status"]=="success"){setUrl(response["url"])}
@@ -41,6 +43,7 @@ export default function Home() {
       })
       .catch(err => console.error(err));
   }
+  
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 gap-2">
